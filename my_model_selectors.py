@@ -105,7 +105,21 @@ class SelectorDIC(ModelSelector):
     def select(self):
         warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-        raise NotImplementedError()
+        best_model = (None, float('-inf'))
+        for n in range(self.min_n_components, self.max_n_components):
+            try:
+                hmm_model = self.base_model(n)
+                M = len((self.words).keys())
+                logL = hmm_model.score(self.X, self.lengths)
+                log_sum = sum([hmm_model.score(*self.hwords[w]) for w in self.words.keys()])
+                score = logL - (1 / (M - 1)) * (log_sum - logL)
+                
+                if best_model[1] < score:
+                    best_model = (hmm_model, score)
+            except:
+                pass
+        
+        return best_model[0]
 
 
 class SelectorCV(ModelSelector):
