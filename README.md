@@ -23,3 +23,22 @@ Notes:
 pip install git+https://github.com/hmmlearn/hmmlearn.git
 ```
 
+# Data Overview
+```
+import numpy as np
+import pandas as pd
+from asl_data import AslDb
+
+
+asl = AslDb() # initializes the database
+asl.df.head() # displays the first five rows of the asl database, indexed by video and frame
+```
+|	  |        | left-x | left-y | right-x | right-y | nose-x | nose-y  | speaker |
+|-----|--------|--------|---------|---------|--------|--------|---------|---------|
+|video|	frame  |        |         |         |        |        |         |		  |
+| 98  |0	   |149	    |181	  |170	    |175	 |161	  |62	    |woman-1  |
+| 98  |1	   |149	    |181	  |170	    |175	 |161	  |62	    |woman-1  |
+| 98  |2	   |149	    |181	  |170	    |175	 |161	  |62	    |woman-1  |
+| 98  |3	   |149	    |181	  |170	    |175	 |161	  |62	    |woman-1  |
+| 98  |4	   |149	    |181	  |170	    |175	 |161	  |62	    |woman-1  |
+
