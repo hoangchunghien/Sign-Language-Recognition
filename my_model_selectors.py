@@ -75,8 +75,21 @@ class SelectorBIC(ModelSelector):
         :return: GaussianHMM object
         """
         warnings.filterwarnings("ignore", category=DeprecationWarning)
+        best_model = (None, float('inf'))
+
+        for n in range(self.min_n_components, self.max_n_components):
+            try:
+                hmm_model = self.base_model(n)
+                logL = hmm_model.score(self.X, self.lengths)
+                logN = np.log(len(self.lengths))
+                p = n ** 2 + 2 * n * hmm_model.n_features - 1
+                score = -2 * logL + p * logN
+                if best_model[1] > score:
+                    best_model = (hmm_model, score)
+            except:
+                pass
         
-        raise NotImplementedError()
+        return best_model[0]
 
 
 class SelectorDIC(ModelSelector):
