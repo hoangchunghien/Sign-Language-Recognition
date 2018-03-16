@@ -133,17 +133,19 @@ class SelectorCV(ModelSelector):
         kf = KFold()
         best_model = (None, float('-inf'))
         for n in range(self.min_n_components, self.max_n_components + 1):
-            hmm_model = self.base_model(n)
             try:
                 curr = None
                 if len(self.sequences) > 2:
                     scores = []
                     for i_train, i_test in kf.split(self.sequences):
+                        self.X, self.lengths = combine_sequences(i_train, self.sequences)
                         X_test, len_test = combine_sequences(i_test, self.sequences)
+                        hmm_model = self.base_model(n)
                         log_likelihood = hmm_model.score(X_test, len_test)
                         scores.append(log_likelihood)
                     curr = (hmm_model, np.mean(scores))
                 else:
+                    hmm_model = self.base_model(n)
                     score = hmm_model.score(self.X, self.lengths)
                     curr = (hmm_model, score)
                 best_model = max(best_model, curr, key=lambda x: x[1])
